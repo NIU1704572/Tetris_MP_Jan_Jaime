@@ -39,22 +39,25 @@ typedef enum
 
 class Figura
 {
-    Figura();
+    Figura(const int& nColum, const int& nFil);
 public:
     void giraFigura(DireccioGir direccio);
 
-    TipusFigura getTipus() const { return tipus; };
-    ColorFigura getColor() const { return forma[2][3]; };
-    int getOrientacio() const { return orientacio; };
-    int getY() const { return pos_y; };
-    int getX() const { return pos_x; };
+    TipusFigura getTipus() const { return m_tipus; };
+    ColorFigura getColor(const int& x, const int& y) const { return m_forma[x][y]; };
+    int getOrientacio() const { return m_orientacio; };
+    int getY() const { return m_y; };
+    int getX() const { return m_x; };
+    
+    void mouFigura(const int& n) { m_x += n; }
+    void baixaFigura() { m_y--; }
 
 
 private:
-    TipusFigura tipus;
-    ColorFigura forma[4][4];
-    int orientacio;
-    int pos_x, pos_y;
+    TipusFigura m_tipus;
+    ColorFigura m_forma[4][4];
+    int m_orientacio;
+    int m_x, m_y;
 };
 
 

@@ -1,13 +1,15 @@
 #include "Figura.h"
-#define FILAS 100;
-#define COLUMNAS 100;
 
-int tauler[FILAS][COLUMNAS];
 
-void transposaFigura(ColorFigura figura[4][4], const TipusFigura& tipus) 
+
+Figura::Figura(const int& nColum, const int& nFil) {
+    m_y = nColum-1;
+    m_x = nFil / 2;
+}
+void transposaFigura(ColorFigura figura[4][4], const TipusFigura& m_tipus) 
 {
     ColorFigura transposada[4][4];
-    if (tipus == FIGURA_I) {
+    if (m_tipus == FIGURA_I) {
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 3; j++) {
                 transposada[j][i] = figura[i][j];
@@ -16,7 +18,7 @@ void transposaFigura(ColorFigura figura[4][4], const TipusFigura& tipus)
     }
 
     else {
-        if (tipus == FIGURA_I) {
+        if (m_tipus == FIGURA_I) {
             for (int i = 0; i < 3; i++) {
                 for (int j = 0; j < 3; j++) {
                     if (j != 0 && i != 0)
@@ -32,30 +34,12 @@ void transposaFigura(ColorFigura figura[4][4], const TipusFigura& tipus)
 
 }
 
-bool inverteixColumnes(ColorFigura figura[4][4], const TipusFigura& tipus) 
+bool inverteixColumnes(ColorFigura figura[4][4], const TipusFigura& m_tipus) 
 {
-    
-    /*
-    int i = 0;
-    int j=0;
-    bool valid = false;
-    while(i < 4 && !valid) 
-    {
-        while(j < 4 && !valid) 
-        {
-            if(invertida[i][j] == 0)
-                valid = true;  
 
-            else
-            j++;
-        }
-        i++;
-    }
-    */
-    
     ColorFigura invertida[4][4];
 
-    if (tipus == FIGURA_I) {
+    if (m_tipus == FIGURA_I) {
         for (int i = 0; i < 4; i++)
         {
             for (int j = 0; j < 4; j++)
@@ -85,11 +69,11 @@ bool inverteixColumnes(ColorFigura figura[4][4], const TipusFigura& tipus)
     figura = invertida;
 }
 
-bool inverteixFiles(ColorFigura figura[4][4], const TipusFigura& tipus)
+bool inverteixFiles(ColorFigura figura[4][4], const TipusFigura& m_tipus)
 {
     ColorFigura invertida[4][4];
 
-    if (tipus == FIGURA_I) {
+    if (m_tipus == FIGURA_I) {
         for (int i = 0; i < 4; i++)
         {
             for (int j = 0; j < 4; j++)
@@ -119,10 +103,10 @@ bool inverteixFiles(ColorFigura figura[4][4], const TipusFigura& tipus)
 }
 
 
-void inverteixFigura(ColorFigura figura[4][4], DireccioGir direccio, TipusFigura tipus)
+void inverteixFigura(ColorFigura figura[4][4], DireccioGir direccio, TipusFigura m_tipus)
 {
     if (direccio == 0)
-        inverteixFiles(figura, tipus);
+        inverteixFiles(figura, m_tipus);
     else
         inverteixColumnes;
 }
@@ -131,21 +115,21 @@ void inverteixFigura(ColorFigura figura[4][4], DireccioGir direccio, TipusFigura
 
 void Figura::giraFigura(DireccioGir direccio)
 {
-    if (tipus == FIGURA_O) 
+    if (m_tipus == FIGURA_O) 
         return;
     
     
 
 
-    transposaFigura(forma, tipus);
-    inverteixFigura(forma, direccio, tipus);
+    transposaFigura(m_forma, m_tipus);
+    inverteixFigura(m_forma, direccio, m_tipus);
       
-    orientacio -= 2 * direccio;
-    orientacio++;
+    m_orientacio -= 2 * direccio;
+    m_orientacio++;
 
-    if (orientacio > 3)
-        orientacio = 0;
+    if (m_orientacio > 3)
+        m_orientacio = 0;
 
-    else if (orientacio < 0)
-        orientacio = 3;
+    else if (m_orientacio < 0)
+        m_orientacio = 3;
 }
