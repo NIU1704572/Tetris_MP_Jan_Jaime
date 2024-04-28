@@ -18,7 +18,7 @@ private:
 	int ComprovaFiles();
 
 
-	TipusFigura m_tauler[MAX_FILA][MAX_COL];
+	ColorFigura m_tauler[MAX_FILA][MAX_COL];
 	Figura m_figura;
 };
 #endif

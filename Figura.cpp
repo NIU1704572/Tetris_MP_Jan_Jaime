@@ -2,10 +2,39 @@
 
 
 
-Figura::Figura(const int& nColum, const int& nFil) {
+
+Figura::Figura() {
+    m_y = 0;
+    m_x = 0;
+    m_orientacio = 0;
+    m_tipus = NO_FIGURA;
+    for (int i = 0; i < 4; i++)
+    {
+        for (int j = 0; j < 4; j++)
+        {
+            m_forma[i][j] = NO_COLOR;
+        }
+    }
+}
+
+
+Figura::Figura(const int& nColum, const int& nFil) 
+{
     m_y = nColum-1;
     m_x = nFil / 2;
+    m_orientacio = 0;
+    m_tipus = NO_FIGURA;
+    for (int i = 0; i < 4; i++)
+    {
+        for (int j = 0; j < 4; j++)
+        {
+            m_forma[i][j] = NO_COLOR;
+        }
+    }
 }
+
+
+
 void transposaFigura(ColorFigura figura[4][4], const TipusFigura& m_tipus) 
 {
     ColorFigura transposada[4][4];
