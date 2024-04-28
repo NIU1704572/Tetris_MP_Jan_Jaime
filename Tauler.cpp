@@ -2,9 +2,12 @@
 
 Tauler::Tauler() 
 {
-	for (int i = 0; i < MAX_FILA; i++) {
-		for (int j = 0; j < MAX_COL; j++) {
-			m_tauler[i][j] = NO_FIGURA;
+	m_figura = Figura(MAX_COL, MAX_FILA);
+	for (int i = 0; i < MAX_FILA; i++) 
+	{
+		for (int j = 0; j < MAX_COL; j++) 
+		{
+			m_tauler[i][j] = NO_COLOR;
 		}
 	}
 }
@@ -18,12 +21,15 @@ bool Tauler::solapa(const Figura& f)
 	int y = m_figura.getY();
 	int i = 0;
 	int j;
+
+	solapa = (f.getX() < 0 || f.getX()  >= MAX_COL);
+
 	while (!solapa && i < 4)
 	{
 		j = 0;
 		while (!solapa && j < 4)
 		{
-			solapa = (m_figura.getColor(i, j) == m_tauler[i+y][j+x]);
+			solapa = ((m_figura.getColor(i, j) != NO_COLOR) && ((x + j >= MAX_COL || x + j < 0) || (m_tauler[i + y][j + x] != NO_COLOR)));
 		}
 	}
 
@@ -37,7 +43,8 @@ bool Tauler::baixaFigura()
 	bool valid = false;
 	Figura comprovacio = m_figura;
 
-	if (m_figura.getY() > 0) {
+	if (m_figura.getY() > 0) 
+	{
 		comprovacio.baixaFigura();
 		valid = (!solapa(comprovacio));
 		if (valid)
@@ -54,7 +61,8 @@ bool Tauler::mouFigura(const int& x)
 	bool valid = false;
 	Figura comprovacio = m_figura;
 
-	if (m_figura.getY() > 0 && (x == 1 || x == -1)) {
+	if (m_figura.getY() > 0 && (x == 1 || x == -1)) 
+	{
 		comprovacio.mouFigura(x);
 		valid = (!solapa(comprovacio));
 		if (valid)
@@ -86,7 +94,7 @@ bool Tauler::giraFigura(DireccioGir direccio)
 
 void Tauler::eliminaFila(const int& index)
 {
-	for (int i = index; i < MAX_FILA; i++)
+	for (int i = index; i + 1 < MAX_FILA; i++)
 	{
 		for (int j = 0; j < MAX_COL; j++)
 		{
@@ -94,7 +102,10 @@ void Tauler::eliminaFila(const int& index)
 		}
 	}
 }
-int Tauler::ComprovaFiles() {
+
+
+int Tauler::ComprovaFiles() 
+{
 
 	int nCompletes = 0;
 	int j;
@@ -113,4 +124,20 @@ int Tauler::ComprovaFiles() {
 		}
 	}
 	return nCompletes;
+}
+
+
+void Tauler::insertaFigura()
+{
+	ColorFigura fColor;
+	for (int i = 0; i < MAX_FILA; i++)
+	{
+		for (int j = 0; j < MAX_COL; j++)
+		{
+			fColor = m_figura.getColor(i, j);
+
+			if (fColor != NO_COLOR)
+				m_tauler[i + m_figura.getY()][j + m_figura.getX()] = fColor;
+		}
+	}
 }

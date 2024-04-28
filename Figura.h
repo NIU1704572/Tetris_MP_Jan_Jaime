@@ -39,8 +39,11 @@ typedef enum
 
 class Figura
 {
-    Figura(const int& nColum, const int& nFil);
+    
 public:
+    Figura(const int& nColum, const int& nFil);
+    Figura();
+
     void giraFigura(DireccioGir direccio);
 
     TipusFigura getTipus() const { return m_tipus; };
