@@ -7,15 +7,21 @@ const int MAX_COL = 8;
 
 class Tauler
 {
-	Tauler();
+	
 public:
+	Tauler();
 	bool baixaFigura();
 	bool mouFigura(const int& x);
 	bool giraFigura(DireccioGir direccio);
+
+	int ComprovaFiles();
+
+	void insertaFigura();
+
 private:
 	void eliminaFila(const int& index);
 	bool solapa(const Figura& f);
-	int ComprovaFiles();
+	
 
 
 	ColorFigura m_tauler[MAX_FILA][MAX_COL];

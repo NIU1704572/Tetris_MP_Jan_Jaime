@@ -22,14 +22,14 @@ bool Tauler::solapa(const Figura& f)
 	int i = 0;
 	int j;
 
-	solapa = (f.getX() < 0 || f.getX() >= MAX_COL);
+	solapa = (f.getX() < 0 || f.getX()  >= MAX_COL);
 
 	while (!solapa && i < 4)
 	{
 		j = 0;
 		while (!solapa && j < 4)
 		{
-			solapa = ((m_figura.getColor(i, j) != NO_COLOR) && (m_tauler[i + y][j + x] != NO_COLOR));
+			solapa = ((m_figura.getColor(i, j) != NO_COLOR) && ((x + j >= MAX_COL || x + j < 0) || (m_tauler[i + y][j + x] != NO_COLOR)));
 		}
 	}
 
@@ -127,3 +127,17 @@ int Tauler::ComprovaFiles()
 }
 
 
+void Tauler::insertaFigura()
+{
+	ColorFigura fColor;
+	for (int i = 0; i < MAX_FILA; i++)
+	{
+		for (int j = 0; j < MAX_COL; j++)
+		{
+			fColor = m_figura.getColor(i, j);
+
+			if (fColor != NO_COLOR)
+				m_tauler[i + m_figura.getY()][j + m_figura.getX()] = fColor;
+		}
+	}
+}
