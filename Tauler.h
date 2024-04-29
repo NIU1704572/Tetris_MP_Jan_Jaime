@@ -10,21 +10,20 @@ class Tauler
 	
 public:
 	Tauler();
-	bool baixaFigura();
-	bool mouFigura(const int& x);
-	bool giraFigura(DireccioGir direccio);
+
 
 	int ComprovaFiles();
 
-	void insertaFigura();
+	void insertaFigura(const Figura& f);
+
+	bool solapa(const Figura& f) const;
 
 private:
 	void eliminaFila(const int& index);
-	bool solapa(const Figura& f);
+
 	
 
 
 	ColorFigura m_tauler[MAX_FILA][MAX_COL];
-	Figura m_figura;
 };
 #endif
