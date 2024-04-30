@@ -18,10 +18,13 @@ public:
 
 	bool solapa(const Figura& f) const;
 
-private:
-	void eliminaFila(const int& index);
+	ColorFigura getTauler(const int& y, const int& x) { return m_tauler[y][x]; }
 
-	
+	void setTauler(const int& y, const int& x, const int& color) { m_tauler[y][x] = (ColorFigura)color; }
+
+private:
+
+	void eliminaFila(const int& index);
 
 
 	ColorFigura m_tauler[MAX_FILA][MAX_COL];

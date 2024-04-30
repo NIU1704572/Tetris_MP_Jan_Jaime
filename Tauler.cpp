@@ -28,7 +28,7 @@ bool Tauler::solapa(const Figura& f) const
 		j = 0;
 		while (!solapa && j < 4)
 		{
-			solapa = ((f.getColor(i, j) != NO_COLOR) && ((x + j >= MAX_COL || x + j < 0) || (m_tauler[i + y][j + x] != NO_COLOR)));
+			solapa = ((f.getColor(i, j) != NO_COLOR) && ((x + j >= MAX_COL || x + j < 0) || (m_tauler[i + y][j + x] != NO_COLOR)) || f.getY() >= MAX_FILA || f.getY() < 0);
 		}
 	}
 
