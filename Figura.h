@@ -53,7 +53,14 @@ public:
     int getX() const { return m_x; };
     
     void mouFigura(const int& n) { m_x += n; }
-    void baixaFigura() { m_y--; }
+    void baixaFigura() { m_y++; }
+
+    void setTipus(const int& t) { m_tipus = (TipusFigura)t; }
+    void setX(const int& x) { m_x = x; }
+    void setY(const int& y) { m_y = y; }
+    void setOrientacio(const int& o) { m_orientacio = o; }
+
+    void fesForma();
 
 
 private:

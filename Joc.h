@@ -3,21 +3,24 @@
 #include "Tauler.h"
 #include "Figura.h"
 #include <string>
+#include <fstream>
 using namespace std;
 
 class Joc
 {
 public:
-	Joc() {}
+	Joc() { m_figura = Figura(); m_tauler = Tauler(); m_puntuacio = 0; }
 	void inicialitza(const string& nomFitxer);
 	bool giraFigura(DireccioGir direccio);
-	bool mouFigura(int dirX);
+	bool mouFigura(const int& dirX);
 	int baixaFigura();
 	void escriuTauler(const string& nomFitxer);
 
 private:
 	Figura m_figura;
 	Tauler m_tauler;
+	int m_puntuacio;
 };
+
 
 #endif

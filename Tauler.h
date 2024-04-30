@@ -10,21 +10,23 @@ class Tauler
 	
 public:
 	Tauler();
-	bool baixaFigura();
-	bool mouFigura(const int& x);
-	bool giraFigura(DireccioGir direccio);
+
 
 	int ComprovaFiles();
 
-	void insertaFigura();
+	void insertaFigura(const Figura& f);
+
+	bool solapa(const Figura& f) const;
+
+	ColorFigura getTauler(const int& y, const int& x) { return m_tauler[y][x]; }
+
+	void setTauler(const int& y, const int& x, const int& color) { m_tauler[y][x] = (ColorFigura)color; }
 
 private:
+
 	void eliminaFila(const int& index);
-	bool solapa(const Figura& f);
-	
 
 
 	ColorFigura m_tauler[MAX_FILA][MAX_COL];
-	Figura m_figura;
 };
 #endif

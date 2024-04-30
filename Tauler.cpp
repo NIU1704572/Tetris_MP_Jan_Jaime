@@ -2,7 +2,6 @@
 
 Tauler::Tauler() 
 {
-	m_figura = Figura(MAX_COL, MAX_FILA);
 	for (int i = 0; i < MAX_FILA; i++) 
 	{
 		for (int j = 0; j < MAX_COL; j++) 
@@ -13,12 +12,12 @@ Tauler::Tauler()
 }
 
 
-bool Tauler::solapa(const Figura& f) 
+bool Tauler::solapa(const Figura& f) const
 {
 	bool solapa = false;
 
-	int x = m_figura.getX();
-	int y = m_figura.getY();
+	int x = f.getX();
+	int y = f.getY();
 	int i = 0;
 	int j;
 
@@ -29,7 +28,7 @@ bool Tauler::solapa(const Figura& f)
 		j = 0;
 		while (!solapa && j < 4)
 		{
-			solapa = ((m_figura.getColor(i, j) != NO_COLOR) && ((x + j >= MAX_COL || x + j < 0) || (m_tauler[i + y][j + x] != NO_COLOR)));
+			solapa = ((f.getColor(i, j) != NO_COLOR) && ((x + j >= MAX_COL || x + j < 0) || (m_tauler[i + y][j + x] != NO_COLOR)) || f.getY() >= MAX_FILA || f.getY() < 0);
 		}
 	}
 
@@ -38,58 +37,7 @@ bool Tauler::solapa(const Figura& f)
 
 
 
-bool Tauler::baixaFigura() 
-{	
-	bool valid = false;
-	Figura comprovacio = m_figura;
 
-	if (m_figura.getY() > 0) 
-	{
-		comprovacio.baixaFigura();
-		valid = (!solapa(comprovacio));
-		if (valid)
-		{
-			m_figura = comprovacio;
-		}
-	}
-	return valid;
-}
-
-bool Tauler::mouFigura(const int& x)
-{
-
-	bool valid = false;
-	Figura comprovacio = m_figura;
-
-	if (m_figura.getY() > 0 && (x == 1 || x == -1)) 
-	{
-		comprovacio.mouFigura(x);
-		valid = (!solapa(comprovacio));
-		if (valid)
-		{
-			m_figura = comprovacio;
-		}
-	}
-	return valid;
-}
-
-
-bool Tauler::giraFigura(DireccioGir direccio)
-{
-	bool valid = false;
-	Figura comprovacio = m_figura;
-
-	if (m_figura.getY() > 0 && (direccio == 1 || direccio == 0)) 
-	{
-		comprovacio.giraFigura(direccio);
-		valid = (!solapa(comprovacio));
-		if (valid)
-		{
-			m_figura = comprovacio;
-		}
-	}
-	return valid;
-}
 
 
 void Tauler::eliminaFila(const int& index)
@@ -100,6 +48,10 @@ void Tauler::eliminaFila(const int& index)
 		{
 			m_tauler[i][j] = m_tauler[i + 1][j];
 		}
+	}
+	for (int i = 0; i < MAX_COL; i++)
+	{
+		m_tauler[0][i] = NO_COLOR;
 	}
 }
 
@@ -127,17 +79,17 @@ int Tauler::ComprovaFiles()
 }
 
 
-void Tauler::insertaFigura()
+void Tauler::insertaFigura(const Figura& f)
 {
 	ColorFigura fColor;
 	for (int i = 0; i < MAX_FILA; i++)
 	{
 		for (int j = 0; j < MAX_COL; j++)
 		{
-			fColor = m_figura.getColor(i, j);
+			fColor = f.getColor(i, j);
 
 			if (fColor != NO_COLOR)
-				m_tauler[i + m_figura.getY()][j + m_figura.getX()] = fColor;
+				m_tauler[i + f.getY()][j + f.getX()] = fColor;
 		}
 	}
 }
