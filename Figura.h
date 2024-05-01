@@ -55,17 +55,18 @@ public:
     void mouFigura(const int& n) { m_x += n; }
     void baixaFigura() { m_y++; }
 
-    void setTipus(const int& t) { m_tipus = (TipusFigura)t; }
+    void setTipus(const TipusFigura& t) { m_tipus = t; }
     void setX(const int& x) { m_x = x; }
     void setY(const int& y) { m_y = y; }
     void setOrientacio(const int& o) { m_orientacio = o; }
 
     void fesForma();
 
+    Figura operator=(const Figura& f);
 
 private:
     TipusFigura m_tipus;
-    ColorFigura m_forma[4][4];
+    ColorFigura m_forma[MAX_ALCADA][MAX_AMPLADA];
     int m_orientacio;
     int m_x, m_y;
 };

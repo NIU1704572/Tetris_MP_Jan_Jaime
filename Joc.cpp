@@ -10,8 +10,8 @@ int Joc::baixaFigura()
 	bool valid = false;
 	Figura comprovacio = m_figura;
 
+	comprovacio.baixaFigura();
 
-		comprovacio.baixaFigura();
 	valid = (!m_tauler.solapa(comprovacio));
 	if (valid)
 	{
@@ -73,38 +73,34 @@ void Joc::inicialitza(const string& nomFitxer)
 
 	if (!Fitxer.eof()) 
 	{
-		for (int i = 0; i < 4; i++)
-		{
-			Fitxer >> in;
-			switch (i)
-			{
-			case 0: 
-				m_figura.setTipus(in);
-				break;
-			case 1:
-				m_figura.setX(in);
-				break;
-			case 2:
-				m_figura.setY(in);
-				break;
-			case 3:
-				m_figura.setOrientacio(in);
-				break;
-			}
-		}
+		int orientacio, col, fila, tipus;
+
+		Fitxer >> tipus >> fila >> col >> orientacio;
+
+		m_figura.setTipus((TipusFigura)tipus);
+		m_figura.setX(col);
+		m_figura.setY(fila);
+		m_figura.setOrientacio(orientacio);
 
 		m_figura.fesForma();
 
 		int i = 0, j = 0;
-		while (!Fitxer.eof() || j < MAX_FILA)
+		while (!Fitxer.eof() && j < MAX_FILA)
 		{
 
 			Fitxer >> in;
 			m_tauler.setTauler(j, i, in);
 
-			i++;
-			if (i <= MAX_COL)
+			
+			if (i >= MAX_COL)
+			{
 				j++;
+				i = 0;
+			}
+			else {
+				i++;
+			}
+				
 		}
 	}
 	Fitxer.close();
@@ -116,15 +112,44 @@ void Joc::escriuTauler(const string& nomFitxer)
 	int out;
 	ofstream fitxer;
 	fitxer.open(nomFitxer);
+	int y;
+	int x;
+
+	switch (m_figura.getTipus())
+	{
+
+	case FIGURA_O:
+		x = m_figura.getX();
+		y = m_figura.getY();
+		break;
+
+	case FIGURA_I:
+		x = m_figura.getX() - 2;
+		y = m_figura.getY() - 1;
+		break;
+
+	default:
+		x = m_figura.getX() - 1;
+		y = m_figura.getY() - 1;
+		break;
+	}
+
 
 	for (int i = 0; i < MAX_FILA; i++)
 	{
 		for (int j = 0; j < MAX_COL; j++)
 		{
-			out = m_tauler.getTauler(i, j);
-			fitxer << out << " ";
+			if ((i >= y && j >= x) && !(j>x+3 || i>x+3) && m_figura.getColor(i, j) != NO_COLOR)
+			{
+				out = m_figura.getColor(i, j);
+			}
+			else
+			{
+				out = m_tauler.getTauler(i, j);
+				
+			}
+			fitxer << out;
 		}
-		fitxer << endl;
 	}
 	fitxer.close();
 }

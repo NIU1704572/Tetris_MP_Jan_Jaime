@@ -39,31 +39,31 @@ void transposaFigura(ColorFigura figura[MAX_ALCADA][MAX_AMPLADA], const TipusFig
 {
     ColorFigura transposada[MAX_ALCADA][MAX_AMPLADA];
     if (m_tipus == FIGURA_I) {
-        for (int i = 0; i < 3; i++) {
-            for (int j = 0; j < 3; j++) {
+        for (int i = 0; i < MAX_ALCADA; i++) {
+            for (int j = 0; j < MAX_AMPLADA; j++) {
                 transposada[j][i] = figura[i][j];
             }
         }
     }
 
     else {
-        if (m_tipus == FIGURA_I) {
-            for (int i = 0; i < 3; i++) {
-                for (int j = 0; j < 3; j++) {
+ 
+            for (int i = 0; i < MAX_ALCADA - 1; i++) {
+                for (int j = 0; j < MAX_AMPLADA - 1; j++) {
                     if (j != 0 && i != 0)
                         transposada[j][i] = figura[i][j];
                     else
                         transposada[j][i] = NO_COLOR;
                 }
             }
-        }
+
     }
 
     figura = transposada;
 
 }
 
-bool inverteixColumnes(ColorFigura figura[MAX_ALCADA][MAX_AMPLADA], const TipusFigura& m_tipus) 
+void inverteixColumnes(ColorFigura figura[MAX_ALCADA][MAX_AMPLADA], const TipusFigura& m_tipus) 
 {
 
     ColorFigura invertida[MAX_ALCADA][MAX_AMPLADA];
@@ -81,9 +81,9 @@ bool inverteixColumnes(ColorFigura figura[MAX_ALCADA][MAX_AMPLADA], const TipusF
     }
 
     else {
-        for (int i = 0; i < MAX_AMPLADA; i++)
+        for (int i = 0; i < MAX_AMPLADA - 1; i++)
         {
-            for (int j = 0; j < MAX_ALCADA; j++)
+            for (int j = 0; j < MAX_ALCADA - 1; j++)
             {
                 if (j != 0 && i != 0)
                     invertida[j][i] = figura[i][3-j];
@@ -98,7 +98,7 @@ bool inverteixColumnes(ColorFigura figura[MAX_ALCADA][MAX_AMPLADA], const TipusF
     figura = invertida;
 }
 
-bool inverteixFiles(ColorFigura figura[MAX_ALCADA][MAX_AMPLADA], const TipusFigura& m_tipus)
+void inverteixFiles(ColorFigura figura[MAX_ALCADA][MAX_AMPLADA], const TipusFigura& m_tipus)
 {
     ColorFigura invertida[MAX_ALCADA][MAX_AMPLADA];
 
@@ -115,9 +115,9 @@ bool inverteixFiles(ColorFigura figura[MAX_ALCADA][MAX_AMPLADA], const TipusFigu
     }
 
     else {
-        for (int i = 0; i < MAX_AMPLADA; i++)
+        for (int i = 0; i < MAX_AMPLADA - 1; i++)
         {
-            for (int j = 0; j < MAX_ALCADA; j++)
+            for (int j = 0; j < MAX_ALCADA - 1; j++)
             {
                 if (j != 0 && i != 0)
                     invertida[j][i] = figura[3-i][3];
@@ -164,6 +164,27 @@ void Figura::giraFigura(DireccioGir direccio)
 }
 
 
+
+Figura Figura::operator=(const Figura& f)
+{
+    Figura res;
+    res.m_tipus = f.m_tipus;
+    res.m_orientacio = f.m_orientacio;
+    res.m_x = f.m_x;
+    res.m_y = f.m_y;
+
+
+    for (int i = 0; i < MAX_AMPLADA; i++)
+    {
+        for (int j = 0; j < MAX_ALCADA; j++)
+        {
+            res.m_forma[i][j] = f.m_forma[i][j];
+        }
+    }
+    return res;
+}
+
+
 void Figura::fesForma()
 {
     ColorFigura color = (ColorFigura)(int)m_tipus;
@@ -188,9 +209,9 @@ void Figura::fesForma()
     case FIGURA_T:
 
         m_forma[0][1] = color;
+        m_forma[1][0] = color;
         m_forma[1][1] = color;
-        m_forma[2][1] = color;
-        m_forma[3][1] = color;
+        m_forma[1][2] = color;
         break;
 
     case FIGURA_L:
@@ -198,15 +219,15 @@ void Figura::fesForma()
         m_forma[1][0] = color;
         m_forma[1][1] = color;
         m_forma[1][2] = color;
-        m_forma[2][2] = color;
+        m_forma[0][2] = color;
         break;
 
 
     case FIGURA_J:
 
-        m_forma[2][0] = color;
-        m_forma[2][1] = color;
-        m_forma[2][2] = color;
+        m_forma[0][0] = color;
+        m_forma[1][0] = color;
+        m_forma[1][1] = color;
         m_forma[1][2] = color;
         break;
 
@@ -225,6 +246,12 @@ void Figura::fesForma()
         m_forma[1][0] = color;
         m_forma[1][1] = color;
         break;
+    }
+
+
+    for (int i = 0; i < m_orientacio % 4; i++)
+    {
+        this->giraFigura(GIR_HORARI);
     }
 }
 
