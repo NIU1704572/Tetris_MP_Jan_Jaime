@@ -82,9 +82,7 @@ void Figura::inverteixColumnes()
         {
             for (int j = 0; j < MAX_ALCADA; j++)
             {
-
-                invertida[i][j] = m_forma[i][MAX_AMPLADA - 1 - j];
-
+                invertida[i][j] = m_forma[MAX_ALCADA -1 - i][j];
             }
         }
     }
@@ -94,23 +92,24 @@ void Figura::inverteixColumnes()
         for (int i = 0; i < MAX_ALCADA; i++) {
             for (int j = 0; j < MAX_AMPLADA; j++) {
                 if (i < MAX_ALCADA - 1 && j < MAX_AMPLADA - 1)
-                    invertida[j][i] = m_forma[i][j];
+                    invertida[i][j] = m_forma[MAX_ALCADA - 2 - i][j];
 
                 else
-                    invertida[j][i] = NO_COLOR;
+                    invertida[i][j] = NO_COLOR;
 
             }
         }
 
     }
 
-    for (int i = 0; i < MAX_AMPLADA; i++)
+    for (int i = 0; i < MAX_ALCADA; i++)
     {
-        for (int j = 0; j < MAX_ALCADA; j++)
+        for (int j = 0; j < MAX_AMPLADA; j++)
         {
             m_forma[i][j] = invertida[i][j];
         }
     }
+    
 }
 
 void Figura::inverteixFiles()
@@ -153,7 +152,7 @@ void Figura::inverteixFiles()
 
 
 
-void Figura::giraFigura(const DireccioGir& direccio, const bool& modOrientacio)
+void Figura::giraFigura(const DireccioGir& direccio)
 {
     if (m_tipus != FIGURA_O) {
 
@@ -168,17 +167,17 @@ void Figura::giraFigura(const DireccioGir& direccio, const bool& modOrientacio)
         else
             inverteixColumnes();
 
-        if (modOrientacio)
-        {
-            m_orientacio -= 2 * direccio;
-            m_orientacio++;
 
-            if (m_orientacio > 3)
-                m_orientacio = 0;
+        
+        m_orientacio -= 2 * direccio;
+        m_orientacio++;
 
-            else if (m_orientacio < 0)
-                m_orientacio = 4 + m_orientacio;
-        }
+        if (m_orientacio > 3)
+            m_orientacio = 0;
+
+        else if (m_orientacio < 0)
+            m_orientacio = 4 + m_orientacio;
+        
     }
 }
 
@@ -203,6 +202,21 @@ Figura Figura::operator=(const Figura& f)
     return res;
 }
 
+
+
+void Figura::iniGir(const DireccioGir& direccio)
+{
+    if (m_tipus != FIGURA_O) {
+
+        this->transposaFigura();
+
+        if (direccio == 0)
+            this->inverteixFiles();
+
+        else
+            inverteixColumnes();
+    }
+}
 
 
 
@@ -259,7 +273,7 @@ void Figura::fesForma()
         break;
 
 
-    case FIGURA_J:
+    case FIGURA_J: 
 
         m_forma[0][0] = color;
         m_forma[1][0] = color;

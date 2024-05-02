@@ -33,7 +33,7 @@ bool Tauler::solapa(const Figura& f) const
 		break;
 
 	case FIGURA_I:
-		x = f.getX() - 2;
+		x = f.getX() - 1;
 		y = f.getY() - 1;
 		break;
 
@@ -44,14 +44,14 @@ bool Tauler::solapa(const Figura& f) const
 	}
 
 
-	solapa = (f.getX() < 0 || f.getX()  >= MAX_COL);
+	solapa = false;
 
 	while (!solapa && i < 4)
 	{
 		j = 0;
 		while (!solapa && j < 4)
 		{
-			solapa = ((f.getColor(i, j) != NO_COLOR) && ((x + j >= MAX_COL || x + j < 0) || (m_tauler[i + y][j + x] != COLOR_NEGRE)) || y >= MAX_FILA || y < 0);
+			solapa = ((f.getColor(i, j) != NO_COLOR) && ((x + j >= MAX_COL || x + j < 0) || (m_tauler[i + y][j + x] != COLOR_NEGRE)));
 			j++;
 		}
 		i++;
@@ -67,11 +67,11 @@ bool Tauler::solapa(const Figura& f) const
 
 void Tauler::eliminaFila(const int& index)
 {
-	for (int i = index; i + 1 < MAX_FILA; i++)
+	for (int i = index; i >= 0; i--)
 	{
 		for (int j = 0; j < MAX_COL; j++)
 		{
-			m_tauler[i][j] = m_tauler[i + 1][j];
+			m_tauler[i][j] = m_tauler[i - 1][j];
 		}
 	}
 	for (int i = 0; i < MAX_COL; i++)

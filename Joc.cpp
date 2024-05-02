@@ -34,15 +34,14 @@ bool Joc::mouFigura(const int& x)
 	bool valid = false;
 	Figura comprovacio = m_figura;
 
-	if (m_figura.getY() > 0 && (x == 1 || x == -1))
+
+	comprovacio.mouFigura(x);
+	valid = (!m_tauler.solapa(comprovacio));
+	if (valid)
 	{
-		comprovacio.mouFigura(x);
-		valid = (!m_tauler.solapa(comprovacio));
-		if (valid)
-		{
-			m_figura = comprovacio;
-		}
+		m_figura.mouFigura(x);
 	}
+
 	return valid;
 }
 
@@ -52,13 +51,13 @@ bool Joc::giraFigura(DireccioGir direccio)
 	bool valid = false;
 	Figura comprovacio = m_figura;
 
-	if (m_figura.getY() > 0 && (direccio == 1 || direccio == 0))
+	if  (direccio == 1 || direccio == 0)
 	{
-		comprovacio.giraFigura(direccio, true);
+		comprovacio.giraFigura(direccio);
 		valid = (!m_tauler.solapa(comprovacio));
 		if (valid)
 		{
-			m_figura = comprovacio;
+			m_figura.giraFigura(direccio);
 		}
 	}
 	return valid;
@@ -87,7 +86,7 @@ void Joc::inicialitza(const string& nomFitxer)
 
 		for (int i = 0; i < orientacio % 4; i++)
 		{
-			m_figura.giraFigura(GIR_HORARI, false);
+			m_figura.iniGir(GIR_HORARI);
 		}
 
 		int i = 0, j = 0;
@@ -125,11 +124,11 @@ void Joc::escriuTauler(const string& nomFitxer)
 
 	case FIGURA_O:
 		x = m_figura.getX();
-		y = m_figura.getY();
+		y = m_figura.getY() - 1;
 		break;
 
 	case FIGURA_I:
-		x = m_figura.getX() - 2;
+		x = m_figura.getX() - 1;
 		y = m_figura.getY() - 1;
 		break;
 
@@ -144,10 +143,17 @@ void Joc::escriuTauler(const string& nomFitxer)
 	{
 		for (int j = 0; j < MAX_COL; j++)
 		{
-			if ((i >= y && j >= x) && (j < x + MAX_AMPLADA - 1 && i < y + MAX_ALCADA - 1) && (m_figura.getColor(i - y, j) != NO_COLOR))
+			bool u = (i >= y && j >= x);
+			bool dos = (j < x + MAX_AMPLADA && i < y + MAX_ALCADA);
+			bool tres = (m_figura.getColor(i - y, j) != NO_COLOR);
+
+			if ((i >= y && j >= x) && (j < x + MAX_AMPLADA && i < y + MAX_ALCADA) && (m_figura.getColor(i - y, j - x) != NO_COLOR))
 			{
-				out = m_figura.getColor(i - y, j);
+				
+
+				out = m_figura.getColor(i - y, j - x);
 			}
+			
 			else
 			{
 				out = m_tauler.getTauler(i, j);
