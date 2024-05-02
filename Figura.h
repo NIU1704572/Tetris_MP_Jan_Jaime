@@ -43,8 +43,7 @@ class Figura
 public:
     Figura(const int& nColum, const int& nFil);
     Figura();
-
-    void giraFigura(DireccioGir direccio);
+    void giraFigura(const DireccioGir& direccio, const bool& modOrientacio);
 
     TipusFigura getTipus() const { return m_tipus; };
     ColorFigura getColor(const int& x, const int& y) const { return m_forma[x][y]; };
@@ -60,11 +59,19 @@ public:
     void setY(const int& y) { m_y = y; }
     void setOrientacio(const int& o) { m_orientacio = o; }
 
+    
+    void netejaForma();
     void fesForma();
 
     Figura operator=(const Figura& f);
 
 private:
+    void transposaFigura();
+    void inverteixColumnes();
+    void inverteixFiles();
+
+
+
     TipusFigura m_tipus;
     ColorFigura m_forma[MAX_ALCADA][MAX_AMPLADA];
     int m_orientacio;

@@ -15,12 +15,13 @@ int Joc::baixaFigura()
 	valid = (!m_tauler.solapa(comprovacio));
 	if (valid)
 	{
-		m_figura = comprovacio;
+		m_figura.baixaFigura();
 	}
 	
 	
 	else {
 		m_tauler.insertaFigura(m_figura);
+		m_figura.netejaForma();
 		nCol = m_tauler.ComprovaFiles();
 	}
 
@@ -53,7 +54,7 @@ bool Joc::giraFigura(DireccioGir direccio)
 
 	if (m_figura.getY() > 0 && (direccio == 1 || direccio == 0))
 	{
-		comprovacio.giraFigura(direccio);
+		comprovacio.giraFigura(direccio, true);
 		valid = (!m_tauler.solapa(comprovacio));
 		if (valid)
 		{
@@ -84,6 +85,11 @@ void Joc::inicialitza(const string& nomFitxer)
 
 		m_figura.fesForma();
 
+		for (int i = 0; i < orientacio % 4; i++)
+		{
+			m_figura.giraFigura(GIR_HORARI, false);
+		}
+
 		int i = 0, j = 0;
 		while (!Fitxer.eof() && j < MAX_FILA)
 		{
@@ -97,9 +103,8 @@ void Joc::inicialitza(const string& nomFitxer)
 				j++;
 				i = 0;
 			}
-			else {
-				i++;
-			}
+
+			i++;
 				
 		}
 	}
@@ -139,9 +144,9 @@ void Joc::escriuTauler(const string& nomFitxer)
 	{
 		for (int j = 0; j < MAX_COL; j++)
 		{
-			if ((i >= y && j >= x) && !(j>x+3 || i>x+3) && m_figura.getColor(i, j) != NO_COLOR)
+			if ((i >= y && j >= x) && (j < x + MAX_AMPLADA - 1 && i < y + MAX_ALCADA - 1) && (m_figura.getColor(i - y, j) != NO_COLOR))
 			{
-				out = m_figura.getColor(i, j);
+				out = m_figura.getColor(i - y, j);
 			}
 			else
 			{
