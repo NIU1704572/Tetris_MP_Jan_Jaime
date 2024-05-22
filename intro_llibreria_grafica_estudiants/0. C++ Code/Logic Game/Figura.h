@@ -1,3 +1,4 @@
+#include "GraphicManager.h"
 #ifndef FIGURA_H
 #define FIGURA_H
 
@@ -64,6 +65,8 @@ public:
     
     void netejaForma();
     void fesForma();
+
+    void dibuixa();
 
     Figura operator=(const Figura& f);
 

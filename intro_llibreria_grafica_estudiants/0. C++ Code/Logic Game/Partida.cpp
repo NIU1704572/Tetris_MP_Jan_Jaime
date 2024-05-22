@@ -14,6 +14,7 @@ Partida::Partida()
     m_forma[1][2] = COLOR_BLAUFOSC;
     m_fila = 1;
     m_columna = 5;
+
 }
 
 void Partida::actualitza(double deltaTime)
@@ -22,18 +23,17 @@ void Partida::actualitza(double deltaTime)
     // 	      Dibuixar a pantalla el fons i el gràfic amb el tauler buit.
     //------------------------------------------------------------------
     //TODO 1.1 Afegir l'include de GraphicManager --> #include "GraphicManager.h"
-#include "GraphicManager.h"
-//TODO 1.2 Fer la crida de dibuixar un sprite --> GraphicManager::getInstance()->drawSprite(image, posX, posY, centered);
+    //TODO 1.2 Fer la crida de dibuixar un sprite --> GraphicManager::getInstance()->drawSprite(image, posX, posY, centered);
 //	    Per començar podem cridar el drawSprite amb els params --> 
 //          (GRAFIC_FONS,0,0, false) i 
 //          (GRAFIC_TAULER, POS_X_TAULER, POS_Y_TAULER, false)
 
 
-
 /*
+
 GraphicManager::getInstance()->drawSprite(GRAFIC_FONS, 0, 0, false);
 GraphicManager::getInstance()->drawSprite(GRAFIC_TAULER, POS_X_TAULER, POS_Y_TAULER, false);
-*/
+
 
 
 
@@ -41,23 +41,23 @@ GraphicManager::getInstance()->drawSprite(GRAFIC_TAULER, POS_X_TAULER, POS_Y_TAU
 
 //TODO 1.3: Dibuixar a pantalla el gràfic amb el tauler i un quadrat groc a la posició (2,3) del tauler
 
-/*
+
 int fila = 2;
 int columna = 3;
 GraphicManager::getInstance()->drawSprite(GRAFIC_FONS, 0, 0, false);
 GraphicManager::getInstance()->drawSprite(GRAFIC_TAULER, POS_X_TAULER, POS_Y_TAULER, false);
 GraphicManager::getInstance()->drawSprite(GRAFIC_QUADRAT_GROC, POS_X_TAULER + (columna * MIDA_QUADRAT), POS_Y_TAULER + ((fila - 1) * MIDA_QUADRAT), false);
-*/
+
 
 //TODO 1.3: Dibuixar a pantalla el gràfic amb el tauler i la figura representada a la matriu m_forma 
 // a la posició del tauler indicada per m_fila i m_columna
 
 
-/*
+
 GraphicManager::getInstance()->drawSprite(GRAFIC_FONS, 0, 0, false);
 GraphicManager::getInstance()->drawSprite(GRAFIC_TAULER, POS_X_TAULER, POS_Y_TAULER, false);
-*/
 
+*/
 //GraphicManager::getInstance()->drawSprite((IMAGE_NAME)((int)m_forma[0][0] + 1), POS_X_TAULER + ((columna)*MIDA_QUADRAT), POS_Y_TAULER + ((fila - 1) * MIDA_QUADRAT), false);
 /*
     for (int i = 0; i < MIDA - 1; i++)
@@ -95,29 +95,30 @@ GraphicManager::getInstance()->drawSprite(GRAFIC_TAULER, POS_X_TAULER, POS_Y_TAU
 // Moure la figura cap a la dreta o l’esquerra si es pressionen les tecles de les fletxes corresponents, 
 // comprovant que no ens passem dels limits del tauler. 
 
-
-/*
-if (Keyboard_GetKeyTrg(KEYBOARD_LEFT))
-    if (m_columna > 1)
-        m_columna--;
-
-
-if (Keyboard_GetKeyTrg(KEYBOARD_RIGHT))
-    if (m_columna < N_COL_TAULER - MIDA + 2)
-        m_columna++;
+    /*
+    GraphicManager::getInstance()->drawSprite(GRAFIC_FONS, 0, 0, false);
+    GraphicManager::getInstance()->drawSprite(GRAFIC_TAULER, POS_X_TAULER, POS_Y_TAULER, false);
+    if (Keyboard_GetKeyTrg(KEYBOARD_LEFT))
+        if (m_columna > 1)
+            m_columna--;
 
 
-for (int i = 0; i < MIDA - 1; i++)
-{
-    for (int j = 0; j < MIDA - 1; j++)
+    if (Keyboard_GetKeyTrg(KEYBOARD_RIGHT))
+        if (m_columna < N_COL_TAULER - MIDA + 2)
+            m_columna++;
+
+
+    for (int i = 0; i < MIDA - 1; i++)
     {
-
-        GraphicManager::getInstance()->drawSprite((IMAGE_NAME)((int)m_forma[i][j] + 1), POS_X_TAULER + ((m_columna + j) * MIDA_QUADRAT), POS_Y_TAULER + ((m_fila - 1 + i) * MIDA_QUADRAT), false);
+        for (int j = 0; j < MIDA - 1; j++)
+        {
+            if (m_forma[i][j]!=NO_COLOR)
+                GraphicManager::getInstance()->drawSprite((IMAGE_NAME)((int)m_forma[i][j] + 1), POS_X_TAULER + ((m_columna + j) * MIDA_QUADRAT), POS_Y_TAULER + ((m_fila - 1 + i) * MIDA_QUADRAT), false);
+        }
     }
-}
-*/
 
 
+    */
 
 //TODO 3: Introduir un temps d'espera
 //-----------------------------------
@@ -178,6 +179,19 @@ GraphicManager::getInstance()->drawSprite(GRAFIC_QUADRAT_GROC, POS_X_TAULER + (m
 GraphicManager::getInstance()->drawSprite(GRAFIC_FONS, 0, 0, false);
 GraphicManager::getInstance()->drawSprite(GRAFIC_TAULER, POS_X_TAULER, POS_Y_TAULER, false);
 m_temps += deltaTime;
+
+
+if (Keyboard_GetKeyTrg(KEYBOARD_LEFT))
+    if (m_columna > 1)
+        m_columna--;
+
+
+if (Keyboard_GetKeyTrg(KEYBOARD_RIGHT))
+    if (m_columna < N_COL_TAULER)
+        m_columna++;
+
+
+
 if (m_temps > 0.5)
 {
     if (m_fila < N_FILES_TAULER)
@@ -189,23 +203,19 @@ GraphicManager::getInstance()->drawSprite(GRAFIC_QUADRAT_GROC,
     POS_Y_TAULER + ((m_fila - 1) * MIDA_QUADRAT), false);
 string msg = "Fila: " + to_string(m_fila) + ", Columna: " + to_string(m_columna);
 GraphicManager::getInstance()->drawFont(FONT_WHITE_30, POS_X_TAULER, POS_Y_TAULER - 50, 1.0, msg);
+
+
 */
-
-
 
 //TODO 5: Mostrar l’estat inicial del joc amb el tauler i la figura inicialitzats del fitxer        
 //-----------------------------------------
 
-
-
-
-
-    
+//Suposadament tant aquesta funció com l'inicialitza funcionen, pero no tenen test (hem testejat varis casos i no hem trobat errors).
+Tetris.dibuixa();
 }
+
 
 void Partida::inicialitza(const string& nomFitxer)
 {
     Tetris.inicialitza(nomFitxer);
-    m_temps = 0;
-    m_fila=Tetris.get
 }

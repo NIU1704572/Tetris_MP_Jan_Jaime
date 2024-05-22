@@ -16,6 +16,7 @@ public:
     void actualitza(double deltaTime);
 
     void inicialitza(const string& nomFitxer);
+
 private:
     double m_temps;
     // Atributs necessaris només pels exemples d'utilització de la llibreria. 

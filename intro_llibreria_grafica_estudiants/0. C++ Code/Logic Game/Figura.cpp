@@ -301,6 +301,19 @@ void Figura::fesForma()
 
 }
 
+void Figura::dibuixa()
+{
+    for (int i = 0; i < MAX_ALCADA; i++)
+    {
+        for (int j = 0; j < MAX_AMPLADA; j++)
+        {
+            if (m_forma[i][j] != NO_COLOR)
+                GraphicManager::getInstance()->drawSprite((IMAGE_NAME)((int)m_forma[i][j] + 1), 120 + ((m_x + j) * MAX_ALCADA), 100 + ((m_y - 1 + i) * MAX_AMPLADA), false);
+        }
+    }
+}
+
+
 /* NO_FIGURA = 0,
     FIGURA_O,
     FIGURA_I,

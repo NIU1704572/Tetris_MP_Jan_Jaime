@@ -1,7 +1,6 @@
 #ifndef JOC_H
 #define JOC_H
 #include "Tauler.h"
-#include "Figura.h"
 #include <string>
 #include <fstream>
 #include <iostream>
@@ -16,7 +15,7 @@ public:
 	bool mouFigura(const int& dirX);
 	int baixaFigura();
 	void escriuTauler(const string& nomFitxer);
-
+	void dibuixa() { m_tauler.dibuixa(); m_figura.dibuixa(); }
 private:
 	Figura m_figura;
 	Tauler m_tauler;

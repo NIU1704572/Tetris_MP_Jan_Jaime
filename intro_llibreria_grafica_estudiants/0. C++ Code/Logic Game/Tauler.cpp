@@ -121,3 +121,23 @@ void Tauler::insertaFigura(const Figura& f)
 		}
 	}
 }
+
+void Tauler::dibuixa()
+{
+	ColorFigura casella;
+
+	GraphicManager::getInstance()->drawSprite(GRAFIC_FONS, 0, 0, false);
+	GraphicManager::getInstance()->drawSprite(GRAFIC_TAULER, 120, 100, false);
+	for (int i = 0; i < MAX_FILA; i++)
+	{
+		for (int j = 0; j < MAX_COL; j++)
+		{
+			casella = m_tauler[i][j];
+			if (casella != COLOR_NEGRE)
+				GraphicManager::getInstance()->drawSprite((IMAGE_NAME)((int)casella + 1),
+					120 + (j + 1) * 26, 100 + i * 26 ,false);
+			//GraphicManager::getInstance()->drawSprite((IMAGE_NAME)((int)m_forma[i][j] + 1),
+			//  POS_X_TAULER + ((m_columna + j) * MIDA_QUADRAT), POS_Y_TAULER + ((m_fila - 1 + i) * MIDA_QUADRAT), false);
+		}
+	}
+}
