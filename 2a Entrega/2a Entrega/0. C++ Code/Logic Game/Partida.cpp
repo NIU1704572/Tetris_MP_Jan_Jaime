@@ -9,68 +9,111 @@ Partida::Partida()
     m_nivell = 0;
     modeTest = false;
     m_acabat = false;
-
 }
 
 void Partida::actualitza(double deltaTime)
 {
     m_temps += deltaTime;
-    bool baixat;
     if (!modeTest)
     {
-        if (Keyboard_GetKeyTrg(KEYBOARD_E))
-            this->actualitzaPuntuacio(4);
-
-        if (Keyboard_GetKeyTrg(KEYBOARD_LEFT))
-            Tetris.mouFigura(-1);
-
-
-        if (Keyboard_GetKeyTrg(KEYBOARD_RIGHT))
-            Tetris.mouFigura(+1);
-       
-
-        if (Keyboard_GetKeyTrg(KEYBOARD_ESCAPE))
-            m_acabat = true;
-
-        if (Keyboard_GetKeyTrg(KEYBOARD_Q))
-            m_puntuacio += 1000;
-
-        if (Keyboard_GetKeyTrg(KEYBOARD_UP))
-            Tetris.giraFigura(GIR_HORARI);
-
-
-        if (Keyboard_GetKeyTrg(KEYBOARD_DOWN))
-            Tetris.giraFigura(GIR_ANTI_HORARI);
-
-        if (Keyboard_GetKeyTrg(KEYBOARD_SPACE))
-        {
-            this->actualitzaPuntuacio(Tetris.plantaFigura());
-            cua.generaFigura();
-            this->actualitzaFigura();
-            
-        }
-
-        if (m_temps > 0.6 - ((float)m_nivell) / 10)
-        {
-            this->actualitzaPuntuacio(Tetris.baixaFigura(baixat));
-            if (!baixat)
-            {
-                cua.generaFigura();
-                this->actualitzaFigura();
-            }
-            Tetris.mostraTauler();
-            m_temps = 0;
-        }
+        this->jocNormal();
     }
+
     else
     {
-
+        
+        this->jocTest();
     }
     Tetris.dibuixa();
     m_acabat = Tetris.gameOver();
     this->drawScore();
 }
 
+
+void Partida::jocNormal()
+{
+    bool baixat = false;
+
+    if (Keyboard_GetKeyTrg(KEYBOARD_E))
+        this->actualitzaPuntuacio(4);
+
+    if (Keyboard_GetKeyTrg(KEYBOARD_LEFT))
+        Tetris.mouFigura(-1);
+
+
+    if (Keyboard_GetKeyTrg(KEYBOARD_RIGHT))
+        Tetris.mouFigura(+1);
+
+
+    if (Keyboard_GetKeyTrg(KEYBOARD_ESCAPE))
+        m_acabat = true;
+
+    if (Keyboard_GetKeyTrg(KEYBOARD_Q))
+        m_puntuacio += 1000;
+
+    if (Keyboard_GetKeyTrg(KEYBOARD_UP))
+        Tetris.giraFigura(GIR_HORARI);
+
+
+    if (Keyboard_GetKeyTrg(KEYBOARD_DOWN))
+        Tetris.giraFigura(GIR_ANTI_HORARI);
+
+    if (Keyboard_GetKeyTrg(KEYBOARD_SPACE))
+    {
+        this->actualitzaPuntuacio(Tetris.plantaFigura());
+        cua.generaFigura();
+        this->actualitzaFigura();
+
+    }
+
+    if (m_temps > 0.6 - ((float)m_nivell) / 10)
+    {
+        this->actualitzaPuntuacio(Tetris.baixaFigura(baixat));
+        if (!baixat)
+        {
+            cua.generaFigura();
+            this->actualitzaFigura();
+        }
+        m_temps = 0;
+    }
+}
+
+void Partida::jocTest()
+{
+    bool baixat = false;
+
+    int mov = cua.elimina_passa_seguent();
+    switch (mov)
+    {
+    case 0:
+        Tetris.mouFigura(-1);
+        break;
+
+    case 1:
+        Tetris.mouFigura(+1);
+        break;
+
+    case 2:
+        Tetris.giraFigura(GIR_HORARI);
+        break;
+
+    case 3:
+        Tetris.giraFigura(GIR_ANTI_HORARI);
+        break;
+
+    case 4:
+        this->actualitzaPuntuacio(Tetris.baixaFigura(baixat));
+        if (!baixat)
+            this->actualitzaFigura();
+        
+
+    case 5:
+        this->actualitzaPuntuacio(Tetris.plantaFigura());
+        cua.generaFigura();
+        this->actualitzaFigura();
+    }
+
+}
 
 
 void Partida::inicialitza(const string& nomFitxer)
@@ -89,7 +132,7 @@ void Cua::afegeix_m(const int& valor)
 }
 
 
-int Cua::elemina_passa_seguent()
+int Cua::elimina_passa_seguent()
 {
     int num = m_cola_movimientos.front();
 
@@ -192,15 +235,13 @@ int Partida::menu()
     return opcion;
 
 }
-/*void Partida::test()
+void Partida::test()
 {
     cua.inicialitza_test();
-    Tetris.inicialitza("../../1. Resources/data/Games/partida.txt");
-
-    if (!Tetris.baixaFigura()) {
-        Tetris.setFigura(cua.seguentFigura());
-    }
-}*/
+    modeTest = true;
+    this->actualitzaFigura();
+ 
+}
 
 void Cua::ompleBossa()
 {

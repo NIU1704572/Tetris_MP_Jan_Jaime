@@ -17,7 +17,7 @@ class Cua
 {
 public:
     void afegeix_m(const int& valor);
-    int elemina_passa_seguent();
+    int elimina_passa_seguent();
     void inicialitza_test();
     Figura seguentFigura();
     TipusFigura generaTipus();
@@ -65,7 +65,7 @@ public:
 
     void inicialitza(const string& nomFitxer);
 
-    void test() { modeTest = true; cua.inicialitza_test(); }
+    void test();
 
     void mostraTauler();
 
@@ -81,10 +81,16 @@ public:
 
     bool isTest() { return modeTest; }
 
-    void drawScore();
+
     
 
 private:
+
+    void jocNormal();
+
+    void jocTest();
+
+    void drawScore();
 
     void actualitzaPuntuacio(const int& linies);
 
