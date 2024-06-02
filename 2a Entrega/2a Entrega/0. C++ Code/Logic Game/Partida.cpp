@@ -27,9 +27,30 @@ void Partida::actualitza(double deltaTime)
 
         if (Keyboard_GetKeyTrg(KEYBOARD_RIGHT))
             Tetris.mouFigura(+1);
+       
+
+        if (Keyboard_GetKeyTrg(KEYBOARD_ESCAPE))
+            m_acabat = true;
+
+        if (Keyboard_GetKeyTrg(KEYBOARD_Q))
+            m_puntuacio += 1000;
+
+        if (Keyboard_GetKeyTrg(KEYBOARD_UP))
+            Tetris.giraFigura(GIR_HORARI);
 
 
-        if (m_temps > 0.5 - ((float)m_nivell) / 10)
+        if (Keyboard_GetKeyTrg(KEYBOARD_DOWN))
+            Tetris.giraFigura(GIR_ANTI_HORARI);
+
+        if (Keyboard_GetKeyTrg(KEYBOARD_SPACE))
+        {
+            this->actualitzaPuntuacio(Tetris.plantaFigura());
+            cua.generaFigura();
+            this->actualitzaFigura();
+            
+        }
+
+        if (m_temps > 0.6 - ((float)m_nivell) / 10)
         {
             this->actualitzaPuntuacio(Tetris.baixaFigura(baixat));
             if (!baixat)
@@ -46,6 +67,8 @@ void Partida::actualitza(double deltaTime)
 
     }
     Tetris.dibuixa();
+    m_acabat = Tetris.gameOver();
+    this->drawScore();
 }
 
 
@@ -342,4 +365,11 @@ void Partida::juga()
     cua.generaFigura();
     cua.generaFigura();
     this->actualitzaFigura();
+}
+
+
+void Partida::drawScore()
+{
+    string msg = "Puntuacio: " + to_string(m_puntuacio) + ", Nivell: " + to_string(m_nivell);
+    GraphicManager::getInstance()->drawFont(FONT_WHITE_30, POS_X_TAULER, POS_Y_TAULER - 50, 1.0, msg);
 }

@@ -52,6 +52,7 @@ int main(int argc, const char* argv[])
     do
     {
         bool menu;
+        bool run;
         do
         {
             menu = true;
@@ -60,15 +61,19 @@ int main(int argc, const char* argv[])
             {
             case 1:
                 game.juga();
+                run = true;
                 break;
             case 2:
                 game.test(); //VARIABLE BOOLEANA PER GENERAR MES FIGURES/llegir moviments
+                run = true;
                 break;
             case 3:
                 game.mostraPuntuacions();
+                run = false;
                 break;
             case 4:
                 //exit(); //error per overload???????
+                run = false;
                 break;
 
             default:
@@ -77,24 +82,27 @@ int main(int argc, const char* argv[])
 
             }
         } while (!menu);
+        if (run)
+        {
+            do {
+                LAST = NOW;
+                NOW = SDL_GetPerformanceCounter();
+                deltaTime = (double)((NOW - LAST) / (double)SDL_GetPerformanceFrequency());
 
-        do {
-            LAST = NOW;
-            NOW = SDL_GetPerformanceCounter();
-            deltaTime = (double)((NOW - LAST) / (double)SDL_GetPerformanceFrequency());
+                // Captura tots els events de ratolí i teclat de l'ultim cicle
+                pantalla.processEvents();
 
-            // Captura tots els events de ratolí i teclat de l'ultim cicle
-            pantalla.processEvents();
+                game.actualitza(deltaTime);
 
-            game.actualitza(deltaTime);
+                // Actualitza la pantalla
+                pantalla.update();
+            } while (!game.isFinish());
 
-            // Actualitza la pantalla
-            pantalla.update();
-        } while (!game.isFinish());
-        
-        if (!game.isTest()) {
-            cout << "GAME OVER\n";
-            game.afegeixPuntuacio();
+
+            if (!game.isTest()) {
+                cout << "GAME OVER\n";
+                game.afegeixPuntuacio();
+            }
         }
 
     } while (!Keyboard_GetKeyTrg(KEYBOARD_ESCAPE));

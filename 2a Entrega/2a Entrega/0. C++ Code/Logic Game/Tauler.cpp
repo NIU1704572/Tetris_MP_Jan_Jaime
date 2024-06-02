@@ -29,13 +29,8 @@ bool Tauler::solapa(const Figura& f) const
 	{
 
 	case FIGURA_O:
-		x = f.getX();
-		y = f.getY();
-		break;
-
-	case FIGURA_I:
 		x = f.getX() - 1;
-		y = f.getY() - 1;
+		y = f.getY();
 		break;
 
 	default:
@@ -52,7 +47,7 @@ bool Tauler::solapa(const Figura& f) const
 		j = 0;
 		while (!solapa && j < 4)
 		{
-			solapa = ((f.getColor(i, j) != NO_COLOR) && ((x + j >= MAX_COL || x + j < 0) || (m_tauler[i + y][j + x] != COLOR_NEGRE)));
+			solapa = ((f.getColor(i, j) != NO_COLOR) && ((x + j >= MAX_COL) || (x + j < 0) || (m_tauler[i + y][j + x] != COLOR_NEGRE) || (y + i + 1 > MAX_FILA)));
 			j++;
 		}
 		i++;
@@ -110,15 +105,34 @@ int Tauler::ComprovaFiles()
 
 void Tauler::insertaFigura(const Figura& f)
 {
-	ColorFigura fColor;
-	for (int i = 0; i < MAX_FILA-MAX_ALCADA; i++)
+	int x, y;
+	switch (f.getTipus())
 	{
-		for (int j = 0; j < MAX_COL-MAX_AMPLADA; j++)
+
+	case FIGURA_O:
+		x = f.getX() - 1;
+		y = f.getY();
+		break;
+
+	case FIGURA_I:
+		x = f.getX() - 1;
+		y = f.getY() - 1;
+		break;
+
+	default:
+		x = f.getX() - 1;
+		y = f.getY() - 1;
+		break;
+	}
+	ColorFigura fColor;
+	for (int i = 0; i < MAX_ALCADA; i++)
+	{
+		for (int j = 0; j < MAX_AMPLADA; j++)
 		{
 			fColor = f.getColor(i, j);
 
 			if (fColor != NO_COLOR)
-				m_tauler[i + f.getY() - 1][j + f.getX() - 1] = fColor;
+				m_tauler[i + y][j + x] = fColor;
 		}
 	}
 }
@@ -139,4 +153,20 @@ void Tauler::dibuixa()
 				POS_X_TAULER + ((1 + j) * MIDA_QUADRAT), POS_Y_TAULER + ( i * MIDA_QUADRAT), false);
 		}
 	}
+}
+
+bool Tauler::gameOver()
+{
+	bool over = false;
+	int i = 0, j = 0;
+
+	
+	while (!over && j < MAX_COL)
+	{
+		over = (m_tauler[i][j] != COLOR_NEGRE);
+		j++;
+	}
+
+
+	return over;
 }

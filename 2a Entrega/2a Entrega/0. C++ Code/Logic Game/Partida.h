@@ -80,6 +80,8 @@ public:
     bool isFinish() { return m_acabat; }
 
     bool isTest() { return modeTest; }
+
+    void drawScore();
     
 
 private:

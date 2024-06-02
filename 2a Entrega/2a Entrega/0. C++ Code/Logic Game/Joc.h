@@ -18,6 +18,8 @@ public:
 	void dibuixa() { m_tauler.dibuixa(); m_figura.dibuixa(); }
 	void mostraTauler();
 	void setFigura(const Figura& fig) { m_figura = fig; }
+	int plantaFigura();
+	bool gameOver();
 private:
 	Figura m_figura;
 	Tauler m_tauler;

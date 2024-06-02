@@ -24,6 +24,8 @@ public:
 
 	void dibuixa();
 
+	bool gameOver();
+
 private:
 
 	void eliminaFila(const int& index);

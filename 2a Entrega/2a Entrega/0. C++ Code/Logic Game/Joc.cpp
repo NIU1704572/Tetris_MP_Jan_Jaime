@@ -218,3 +218,21 @@ void Joc::mostraTauler()
 	
 }
 
+
+int Joc::plantaFigura()
+{
+	int borrat;
+	bool baixat;
+	do
+	{
+		borrat=(baixaFigura(baixat));
+
+	}while (baixat);
+
+	return borrat;
+}
+
+bool Joc::gameOver()
+{
+	return m_tauler.gameOver();
+}
