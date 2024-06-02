@@ -21,7 +21,6 @@ void Partida::actualitza(double deltaTime)
 
     else
     {
-        
         this->jocTest();
     }
     Tetris.dibuixa();
@@ -66,7 +65,7 @@ void Partida::jocNormal()
 
     }
 
-    if (m_temps > 0.6 - ((float)m_nivell) / 10)
+    if (m_temps > 0.6 - ((float)m_nivell) / 20.0)
     {
         this->actualitzaPuntuacio(Tetris.baixaFigura(baixat));
         if (!baixat)
@@ -166,46 +165,13 @@ void Cua::inicialitza_test()
 {
     ifstream fitxer;
 
-    fitxer.open("../../2a Entrega/1. Resources/data/Games/figures");
+   
 
     int leido;
-    int i = 0;
-    Figura fig;
-    while (!fitxer.eof())
-    {
-        fitxer >> leido;
-        switch (i) {
-        case 0:
-            fig.setTipus((TipusFigura)leido);
-            break;
 
-        case 1:
-            fig.setX(leido);
-            break;
+    
 
-        case 2:
-            fig.setY(leido);
-            break;
-
-        case 3:
-            fig.setOrientacio(leido);
-            fig.fesForma();
-            m_cola_figuras.push(fig);
-            break;
-
-        }
-
-
-        i++;
-
-        if (i > 3)
-            i = 0;
-    }
-
-
-    fitxer.close();
-
-    fitxer.open("../../2a Entrega/1. Resources/data/Games/moviments");
+    fitxer.open("../2a Entrega/1. Resources/data/Games/moviments");
 
     while (!fitxer.eof())
     {
@@ -216,6 +182,32 @@ void Cua::inicialitza_test()
     fitxer.close();
 
 
+    fitxer.open("../1. Resources/data/Games/figures");
+    int i = 0;
+    Figura fig;
+    while (!fitxer.eof())
+    {
+        int orientacio, col, fila, tipus;
+
+        fitxer >> tipus >> fila >> col >> orientacio;
+
+        fig.setTipus((TipusFigura)tipus);
+        fig.setX(col);
+        fig.setY(fila);
+        fig.setOrientacio(orientacio);
+
+        fig.fesForma();
+
+        for (int i = 0; i < orientacio % 4; i++)
+        {
+            fig.iniGir(GIR_HORARI);
+        }
+
+        m_cola_figuras.push(fig);
+    }
+
+
+    fitxer.close();
 
 }
 
@@ -235,11 +227,13 @@ int Partida::menu()
     return opcion;
 
 }
+
 void Partida::test()
 {
+    Tetris.inicialitza("../1. Resources/data/Games/partida");
+    this->Tetris.dibuixa();
     cua.inicialitza_test();
     modeTest = true;
-    this->actualitzaFigura();
  
 }
 

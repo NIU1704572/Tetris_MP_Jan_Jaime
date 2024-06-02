@@ -70,42 +70,49 @@ void Joc::inicialitza(const string& nomFitxer)
 	ifstream Fitxer;
 	int in;
 	Fitxer.open(nomFitxer);
-
-	if (!Fitxer.eof())
+	if (!Fitxer.is_open())
 	{
-		int orientacio, col, fila, tipus;
-
-		Fitxer >> tipus >> fila >> col >> orientacio;
-
-		m_figura.setTipus((TipusFigura)tipus);
-		m_figura.setX(col);
-		m_figura.setY(fila);
-		m_figura.setOrientacio(orientacio);
-
-		m_figura.fesForma();
-
-		for (int i = 0; i < orientacio % 4; i++)
+		if (!Fitxer.eof())
 		{
-			m_figura.iniGir(GIR_HORARI);
-		}
+			int orientacio, col, fila, tipus;
 
-		int i = 0, j = 0;
-		while (!Fitxer.eof() && j < MAX_FILA)
-		{
+			Fitxer >> tipus >> fila >> col >> orientacio;
 
-			Fitxer >> in;
-			m_tauler.setTauler(j, i, in);
+			m_figura.setTipus((TipusFigura)tipus);
+			m_figura.setX(col);
+			m_figura.setY(fila);
+			m_figura.setOrientacio(orientacio);
 
+			m_figura.fesForma();
 
-			if (i >= MAX_COL)
+			for (int i = 0; i < orientacio % 4; i++)
 			{
-				j++;
-				i = 0;
+				m_figura.iniGir(GIR_HORARI);
 			}
 
-			i++;
+			int i = 0, j = 0;
+			while (!Fitxer.eof() && j < MAX_FILA)
+			{
 
+				Fitxer >> in;
+				m_tauler.setTauler(j, i, in);
+
+
+				if (i >= MAX_COL)
+				{
+					j++;
+					i = 0;
+				}
+
+				i++;
+
+			}
 		}
+		
+	}
+	else
+	{
+		cout << "mira k eres subnormal";
 	}
 	Fitxer.close();
 }
