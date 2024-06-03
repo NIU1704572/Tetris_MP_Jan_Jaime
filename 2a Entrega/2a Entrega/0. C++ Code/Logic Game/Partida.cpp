@@ -2,6 +2,131 @@
 #include "InfoJoc.h"
 #include "GraphicManager.h"
 
+//metodes de cua
+
+void Cua::afegeix_m(const int& valor)
+{
+    m_cola_movimientos.push(valor);
+}
+
+
+int Cua::elimina_passa_seguent()
+{
+    int num;
+    if (m_cola_movimientos.empty())
+    {
+        num = -1;
+    }
+    else 
+    { 
+       num = m_cola_movimientos.front();
+
+        m_cola_movimientos.pop();
+    }
+    
+
+    return num;
+}
+
+Figura Cua::seguentFigura()
+{
+    Figura fig;
+    
+    if (!m_cola_figuras.empty())
+    {
+        fig = m_cola_figuras.front();
+        
+    }
+
+    m_cola_figuras.pop();
+
+    return fig;
+}
+
+void Cua::ompleBossa()
+{
+    m_bossaFig.push_back(FIGURA_L);
+    m_bossaFig.push_back(FIGURA_O);
+    m_bossaFig.push_back(FIGURA_I);
+    m_bossaFig.push_back(FIGURA_S);
+    m_bossaFig.push_back(FIGURA_Z);
+    m_bossaFig.push_back(FIGURA_J);
+    m_bossaFig.push_back(FIGURA_T);
+}
+
+void Cua::inicialitza_test()
+{
+    ifstream fitxer;
+
+   
+
+    int leido;
+
+    
+
+    fitxer.open("../1. Resources/data/Games/moviments.txt");
+
+    while (!fitxer.eof())
+    {
+        fitxer >> leido;
+        afegeix_m(leido);
+    }
+
+    fitxer.close();
+
+
+    fitxer.open("../1. Resources/data/Games/figures.txt");
+    int i = 0;
+    Figura fig;
+    while (!fitxer.eof())
+    {
+        int orientacio, col, fila, tipus;
+
+        fitxer >> tipus >> fila >> col >> orientacio;
+
+        fig.setTipus((TipusFigura)tipus);
+        fig.setX(col);
+        fig.setY(fila);
+        fig.setOrientacio(orientacio);
+
+        fig.fesForma();
+
+        for (int i = 0; i < orientacio % 4; i++)
+        {
+            fig.iniGir(GIR_HORARI);
+        }
+
+        m_cola_figuras.push(fig);
+    }
+
+
+    fitxer.close();
+
+}
+
+void Cua::generaFigura()
+{
+
+    Figura fig;
+    fig.setTipus(this->generaTipus());
+
+    fig.setX(5);
+    fig.setY(0);
+    fig.fesForma();
+
+    int orientacio = (rand() % 4);
+    fig.setOrientacio(orientacio);
+
+    for (int i = 0; i < orientacio % 4; i++)
+    {
+        fig.iniGir(GIR_HORARI);
+    }
+    m_cola_figuras.push(fig);
+}
+
+
+
+//metodes de partida
 Partida::Partida()
 {
     m_puntuacio = 0;
@@ -11,21 +136,50 @@ Partida::Partida()
     m_acabat = false;
 }
 
+int Partida::menu()
+{
+
+    cout << "\tMenu Principal\n" 
+        <<  "===================================\n"
+        << "1. Joc en mode normal " << endl
+        << "2. Joc en mode test " << endl
+        << "3. Mostrar puntuacions" << endl
+        << "4. Sortir" << endl << endl;
+
+    int opcion;
+
+    cin >> opcion;
+    cout << endl;
+
+    return opcion;
+
+}
+
+void Partida::test()
+{
+    Tetris.inicialitza("../1. Resources/data/Games/partida.txt");
+    this->Tetris.dibuixa();
+    cua.inicialitza_test();
+    modeTest = true;
+ 
+}
+
 void Partida::actualitza(double deltaTime)
 {
     m_temps += deltaTime;
     if (!modeTest)
     {
         this->jocNormal();
-        m_acabat = Tetris.gameOver();
     }
 
     else
     {
         this->jocTest();
     }
+
     Tetris.dibuixa();
     this->drawScore();
+
 }
 
 
@@ -61,14 +215,17 @@ void Partida::jocNormal()
     {
         this->actualitzaPuntuacio(Tetris.plantaFigura());
         cua.generaFigura();
-        this->actualitzaFigura();
+        m_acabat = Tetris.gameOver();
+        if (!m_acabat)
+            this->actualitzaFigura();
 
     }
 
     if (m_temps > 0.6 - ((float)m_nivell) / 20.0)
     {
         this->actualitzaPuntuacio(Tetris.baixaFigura(baixat));
-        if (!baixat)
+        m_acabat = Tetris.gameOver();
+        if (!baixat && !m_acabat)
         {
             cua.generaFigura();
             this->actualitzaFigura();
@@ -133,136 +290,6 @@ void Partida::mostraTauler()
     Tetris.mostraTauler();
 }
 
-void Cua::afegeix_m(const int& valor)
-{
-    m_cola_movimientos.push(valor);
-}
-
-
-int Cua::elimina_passa_seguent()
-{
-    int num;
-    if (m_cola_movimientos.empty())
-    {
-        num = -1;
-    }
-    else 
-    { 
-       num = m_cola_movimientos.front();
-
-        m_cola_movimientos.pop();
-    }
-    
-
-    return num;
-}
-
-Figura Cua::seguentFigura()
-{
-    Figura fig;
-    
-    if (!m_cola_figuras.empty())
-    {
-        fig = m_cola_figuras.front();
-        
-    }
-
-    m_cola_figuras.pop();
-
-    return fig;
-}
-
-
-void Cua::inicialitza_test()
-{
-    ifstream fitxer;
-
-   
-
-    int leido;
-
-    
-
-    fitxer.open("../1. Resources/data/Games/moviments.txt");
-
-    while (!fitxer.eof())
-    {
-        fitxer >> leido;
-        afegeix_m(leido);
-    }
-
-    fitxer.close();
-
-
-    fitxer.open("../1. Resources/data/Games/figures.txt");
-    int i = 0;
-    Figura fig;
-    while (!fitxer.eof())
-    {
-        int orientacio, col, fila, tipus;
-
-        fitxer >> tipus >> fila >> col >> orientacio;
-
-        fig.setTipus((TipusFigura)tipus);
-        fig.setX(col);
-        fig.setY(fila);
-        fig.setOrientacio(orientacio);
-
-        fig.fesForma();
-
-        for (int i = 0; i < orientacio % 4; i++)
-        {
-            fig.iniGir(GIR_HORARI);
-        }
-
-        m_cola_figuras.push(fig);
-    }
-
-
-    fitxer.close();
-
-}
-
-
-int Partida::menu()
-{
-
-    cout << "\tMenu Principal\n" 
-        <<  "===================================\n"
-        << "1. Joc en mode normal " << endl
-        << "2. Joc en mode test " << endl
-        << "3. Mostrar puntuacions" << endl
-        << "4. Sortir" << endl << endl;
-
-    int opcion;
-
-    cin >> opcion;
-    cout << endl;
-
-    return opcion;
-
-}
-
-void Partida::test()
-{
-    Tetris.inicialitza("../1. Resources/data/Games/partida.txt");
-    this->Tetris.dibuixa();
-    cua.inicialitza_test();
-    modeTest = true;
- 
-}
-
-void Cua::ompleBossa()
-{
-    m_bossaFig.push_back(FIGURA_L);
-    m_bossaFig.push_back(FIGURA_O);
-    m_bossaFig.push_back(FIGURA_I);
-    m_bossaFig.push_back(FIGURA_S);
-    m_bossaFig.push_back(FIGURA_Z);
-    m_bossaFig.push_back(FIGURA_J);
-    m_bossaFig.push_back(FIGURA_T);
-}
-
 TipusFigura Cua::generaTipus() 
 {
     vector <TipusFigura>::iterator tipus;
@@ -285,18 +312,7 @@ TipusFigura Cua::generaTipus()
     return teepus;
 }
 
-void Cua::generaFigura()
-{
- 
-    Figura fig;
-    fig.setTipus(this->generaTipus());
 
-    fig.setOrientacio(rand() % 4);
-    fig.setX(5);
-    fig.setY(0);
-    fig.fesForma();
-    m_cola_figuras.push(fig);
-}
 
 
 void Partida::actualitzaFigura()

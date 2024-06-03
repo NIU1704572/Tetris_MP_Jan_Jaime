@@ -131,7 +131,7 @@ void Tauler::insertaFigura(const Figura& f)
 		{
 			fColor = f.getColor(i, j);
 
-			if (fColor != NO_COLOR)
+			if (fColor != NO_COLOR && m_tauler[i + y][j + x] == COLOR_NEGRE)
 				m_tauler[i + y][j + x] = fColor;
 		}
 	}

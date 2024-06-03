@@ -7,6 +7,7 @@
 #if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__) || defined  (_WIN64)
 
 #include <iostream>
+#include <cstdlib>
 //Definicio necesaria per poder incloure la llibreria i que trobi el main
 #define SDL_MAIN_HANDLED
 #include <windows.h>
@@ -50,6 +51,7 @@ int main(int argc, const char* argv[])
     Uint64 LAST = 0;
     double deltaTime = 0;
     bool run, show;
+    srand((unsigned)time(NULL)); //aleatorietat més creible gràcies a aquesta funció de cstdlib que genera "seeds" per la funció random
     do
     {
         show = false;
