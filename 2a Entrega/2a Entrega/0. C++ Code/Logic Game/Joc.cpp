@@ -70,7 +70,7 @@ void Joc::inicialitza(const string& nomFitxer)
 	ifstream Fitxer;
 	int in;
 	Fitxer.open(nomFitxer);
-	if (!Fitxer.is_open())
+	if (Fitxer.is_open())
 	{
 		if (!Fitxer.eof())
 		{
@@ -112,7 +112,7 @@ void Joc::inicialitza(const string& nomFitxer)
 	}
 	else
 	{
-		cout << "mira k eres subnormal";
+		cout << "Error: el fitxer de partida no s'ha pogut obrir.";
 	}
 	Fitxer.close();
 }

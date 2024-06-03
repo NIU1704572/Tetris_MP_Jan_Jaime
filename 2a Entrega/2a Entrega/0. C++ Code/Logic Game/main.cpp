@@ -44,15 +44,16 @@ int main(int argc, const char* argv[])
     int opcio;
     //game.inicialitza("C:/Users/santa/Downloads/wewooo/intro_llibreria_grafica_estudiants/1. Resources/data/Games/partida.txt");
     //game.mostraTauler();
-    pantalla.show();
+    
 
     Uint64 NOW = SDL_GetPerformanceCounter();
     Uint64 LAST = 0;
     double deltaTime = 0;
+    bool run, show;
     do
     {
+        show = false;
         bool menu;
-        bool run;
         do
         {
             menu = true;
@@ -70,20 +71,21 @@ int main(int argc, const char* argv[])
             case 3:
                 game.mostraPuntuacions();
                 run = false;
+                show = true;
                 break;
             case 4:
-                //exit(); //error per overload???????
                 run = false;
                 break;
 
             default:
-                cout << "Això no és una opció";
+                cout << "Això no és una opció.\n";
                 menu = false;
 
             }
         } while (!menu);
         if (run)
         {
+            pantalla.show();
             do {
                 LAST = NOW;
                 NOW = SDL_GetPerformanceCounter();
@@ -99,13 +101,18 @@ int main(int argc, const char* argv[])
             } while (!game.isFinish());
 
 
-            if (!game.isTest()) {
+            if (run && !game.isTest()) {
                 cout << "GAME OVER\n";
                 game.afegeixPuntuacio();
             }
+
+            else if (game.isTest())
+            {
+                cout << "Test finalitzat: no queden moviments.\n";
+            }
         }
 
-    } while (!Keyboard_GetKeyTrg(KEYBOARD_ESCAPE));
+    } while (!Keyboard_GetKeyTrg(KEYBOARD_ESCAPE) && (run || show));
     // Sortim del bucle si pressionem ESC
 
     //Instruccio necesaria per alliberar els recursos de la llibreria 

@@ -17,6 +17,7 @@ void Partida::actualitza(double deltaTime)
     if (!modeTest)
     {
         this->jocNormal();
+        m_acabat = Tetris.gameOver();
     }
 
     else
@@ -24,7 +25,6 @@ void Partida::actualitza(double deltaTime)
         this->jocTest();
     }
     Tetris.dibuixa();
-    m_acabat = Tetris.gameOver();
     this->drawScore();
 }
 
@@ -79,39 +79,47 @@ void Partida::jocNormal()
 
 void Partida::jocTest()
 {
-    bool baixat = false;
-
-    int mov = cua.elimina_passa_seguent();
-    switch (mov)
+    if (m_temps > 0.8)
     {
-    case 0:
-        Tetris.mouFigura(-1);
-        break;
+        m_temps = 0;
 
-    case 1:
-        Tetris.mouFigura(+1);
-        break;
+        bool baixat = false;
 
-    case 2:
-        Tetris.giraFigura(GIR_HORARI);
-        break;
+        int mov = cua.elimina_passa_seguent();
+        switch (mov)
+        {
+        case -1:
+            m_acabat = true;
+            break;
+        case 0:
+            Tetris.mouFigura(-1);
+            break;
 
-    case 3:
-        Tetris.giraFigura(GIR_ANTI_HORARI);
-        break;
+        case 1:
+            Tetris.mouFigura(+1);
+            break;
 
-    case 4:
-        this->actualitzaPuntuacio(Tetris.baixaFigura(baixat));
-        if (!baixat)
+        case 2:
+            Tetris.giraFigura(GIR_HORARI);
+            break;
+
+        case 3:
+            Tetris.giraFigura(GIR_ANTI_HORARI);
+            break;
+
+        case 4:
+            this->actualitzaPuntuacio(Tetris.baixaFigura(baixat));
+            if (!baixat)
+                this->actualitzaFigura();
+            break;
+
+
+        case 5:
+            this->actualitzaPuntuacio(Tetris.plantaFigura());
             this->actualitzaFigura();
-        
-
-    case 5:
-        this->actualitzaPuntuacio(Tetris.plantaFigura());
-        cua.generaFigura();
-        this->actualitzaFigura();
+            break;
+        }
     }
-
 }
 
 
@@ -133,14 +141,18 @@ void Cua::afegeix_m(const int& valor)
 
 int Cua::elimina_passa_seguent()
 {
-    int num = m_cola_movimientos.front();
-
+    int num;
     if (m_cola_movimientos.empty())
     {
         num = -1;
     }
+    else 
+    { 
+       num = m_cola_movimientos.front();
 
-    m_cola_movimientos.pop();
+        m_cola_movimientos.pop();
+    }
+    
 
     return num;
 }
@@ -171,7 +183,7 @@ void Cua::inicialitza_test()
 
     
 
-    fitxer.open("../2a Entrega/1. Resources/data/Games/moviments");
+    fitxer.open("../1. Resources/data/Games/moviments.txt");
 
     while (!fitxer.eof())
     {
@@ -182,7 +194,7 @@ void Cua::inicialitza_test()
     fitxer.close();
 
 
-    fitxer.open("../1. Resources/data/Games/figures");
+    fitxer.open("../1. Resources/data/Games/figures.txt");
     int i = 0;
     Figura fig;
     while (!fitxer.eof())
@@ -215,7 +227,9 @@ void Cua::inicialitza_test()
 int Partida::menu()
 {
 
-    cout << "1. Joc en mode normal " << endl
+    cout << "\tMenu Principal\n" 
+        <<  "===================================\n"
+        << "1. Joc en mode normal " << endl
         << "2. Joc en mode test " << endl
         << "3. Mostrar puntuacions" << endl
         << "4. Sortir" << endl << endl;
@@ -223,6 +237,7 @@ int Partida::menu()
     int opcion;
 
     cin >> opcion;
+    cout << endl;
 
     return opcion;
 
@@ -230,7 +245,7 @@ int Partida::menu()
 
 void Partida::test()
 {
-    Tetris.inicialitza("../1. Resources/data/Games/partida");
+    Tetris.inicialitza("../1. Resources/data/Games/partida.txt");
     this->Tetris.dibuixa();
     cua.inicialitza_test();
     modeTest = true;
@@ -309,10 +324,11 @@ void Partida::mostraPuntuacions()
             i++;
         }
         fitxer.close();
+        cout << "\n\n";
     }
 
     else
-        cout << "No s'ha pogut obrir el fitxer.";
+        cout << "No s'ha pogut obrir el fitxer.\n\n";
 
 }
 
@@ -323,6 +339,7 @@ void Partida::afegeixPuntuacio()
     string nom;
     cout << "Nom del jugador: " << endl;
     cin >> nom;
+    cout << endl;
 
     Llista in;
     in.setNom(nom);
