@@ -418,7 +418,7 @@ void Partida::actualitzaPuntuacio(const int& linies)
         break;
     case 4:
         m_puntuacio += 500;
-
+        break;
     default:
         cout << "Error de Puntuacio: Aquesta xifra no hauria de ser possible.\n";
          break;
